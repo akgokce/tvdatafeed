@@ -9,6 +9,7 @@ import pandas as pd
 from websocket import create_connection
 import requests
 import json
+from typing import Union
 
 logger = logging.getLogger(__name__)
 
@@ -189,7 +190,7 @@ class TvDatafeed:
         self,
         symbol: str,
         exchange: str = "NSE",
-        interval: Interval = Interval.in_daily,
+        interval: Union[Interval, str] = Interval.in_daily,
         n_bars: int = 10,
         fut_contract: int = None,
         extended_session: bool = False,
@@ -211,7 +212,8 @@ class TvDatafeed:
             symbol=symbol, exchange=exchange, contract=fut_contract
         )
 
-        interval = interval.value
+        if isinstance(interval, Interval):
+            interval = interval.value
 
         self.__create_connection()
 
